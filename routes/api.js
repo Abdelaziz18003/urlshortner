@@ -4,7 +4,6 @@ var router = express.Router();
 var mongo = require("mongodb").MongoClient;
 var shorten = require("../functions/shorten")
 var dbUri = "mongodb://localhost:27017/url-shortner";
-var appUri = "localhost:3000/"
 
 /* GET api description. */
 router.get('/', function(req, res, next) {
@@ -34,7 +33,7 @@ router.get('/shorten/*', function(req, res, next) {
             dbItem = {
                 counter: maxCounter + 1,
                 longUrl: req.params[0],
-                shortUrl: appUri + shorten(maxCounter + 1)
+                shortUrl: shorten(maxCounter + 1)
             };
             urls.insert(dbItem, function() {
 
