@@ -1,4 +1,5 @@
 {
+<<<<<<< 55f56317a01a645e1960cf883e0c6cf620620c09
   "name": "urlshortner",
   "version": "1.0.0",
   "description": "",
@@ -10,5 +11,21 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.14.1"
+=======
+  "name": "url-shortner",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www"
+  },
+  "dependencies": {
+    "body-parser": "~1.16.0",
+    "cookie-parser": "~1.4.3",
+    "debug": "~2.6.0",
+    "express": "~4.14.1",
+    "hbs": "~4.0.1",
+    "morgan": "~1.7.0",
+    "serve-favicon": "~2.3.2"
+>>>>>>> initial commit
   }
 }
