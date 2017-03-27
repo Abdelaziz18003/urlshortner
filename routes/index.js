@@ -17,14 +17,25 @@ router.get('/:shortUrl', function(req, res, next) {
         assert.equal(null, err, "can not connect to the database");
 
         var urls = db.collection("urls");
-        var resultArray = [];
 
         // search for the unique document containing the provided short url
-        var cursor = urls.find({ shortUrl: req.params.shortUrl });
-        cursor.forEach(function(doc) {
-            resultArray.push(doc);
-        }, function() {
-            res.redirect(resultArray[0].longUrl);
+        urls.find({ shortUrl: req.params.shortUrl }).toArray(function(err, docs) {
+
+            if (docs.length > 0) {
+
+                // redirect to corresponding original url
+                res.redirect(docs[0].longUrl);
+            } else {
+                res.render(
+                    "error", {
+                        message: "page not found",
+                        error: {
+                            status: 404,
+                            stack: "the url you have entered doesn't exist in the database"
+                        }
+                    }
+                );
+            }
         })
     })
 });
