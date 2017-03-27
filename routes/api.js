@@ -2,8 +2,11 @@ var express = require('express');
 var assert = require("assert");
 var router = express.Router();
 var mongo = require("mongodb").MongoClient;
-var shorten = require("../functions/shorten")
-var DB_URI = require("../config").DB_URI;
+var shorten = require("../functions/shorten");
+
+const DB_URI = require("../config").DB_URI;
+const APP_URI = require("../config").APP_URI;
+const PORT = require("../config").PORT
 
 /* GET api description. */
 router.get('/', function(req, res, next) {
@@ -37,8 +40,11 @@ router.get('/shorten/*', function(req, res, next) {
             };
             urls.insert(dbItem, function() {
 
-                // when inserting is done respond with a json file
-                res.json({ longUrl: dbItem.longUrl, shortUrl: dbItem.shortUrl });
+                // respond with a json file
+                res.json({
+                    longUrl: dbItem.longUrl,
+                    shortUrl: "http://" + APP_URI + ":" + PORT + "/" + dbItem.shortUrl
+                });
                 db.close();
             });
         });
