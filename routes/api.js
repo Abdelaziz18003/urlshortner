@@ -14,7 +14,7 @@ router.get('/', function(req, res, next) {
 });
 
 /* shortner a Url. */
-router.get('/shorten/*', function(req, res, next) {
+router.get('/new/*', function(req, res, next) {
 
     mongo.connect(DB_URI, function(err, db) {
         assert.equal(null, err);
@@ -25,25 +25,23 @@ router.get('/shorten/*', function(req, res, next) {
         var dbItem = {};
 
         // get the max value of counter
-        var cursor = urls.find().sort({ counter: -1 }).limit(1);
+        urls.count({}, function(err, docsNum) {
 
-        cursor.forEach(function(doc) {
-            resultsArray.push(doc);
-        }, function() {
-            maxCounter = resultsArray[0].counter;
+            assert.equal(err, null, "error counting the number of docs");
 
-            // save the url infos to the database
-            dbItem = {
-                counter: maxCounter + 1,
+            // make a new url object
+            newUrl = {
                 longUrl: req.params[0],
-                shortUrl: shorten(maxCounter + 1)
+                shortUrl: shorten(docsNum + 1)
             };
-            urls.insert(dbItem, function() {
 
-                // respond with a json file
+            // save the new url to the database
+            urls.insert(newUrl, function() {
+
+                // respond with a json file containing both the long and the short urls
                 res.json({
-                    longUrl: dbItem.longUrl,
-                    shortUrl: "http://" + APP_URI + ":" + PORT + "/" + dbItem.shortUrl
+                    longUrl: newUrl.longUrl,
+                    shortUrl: "http://" + APP_URI + ":" + PORT + "/" + newUrl.shortUrl
                 });
                 db.close();
             });
