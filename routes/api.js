@@ -3,7 +3,7 @@ var assert = require("assert");
 var router = express.Router();
 var mongo = require("mongodb").MongoClient;
 var shorten = require("../functions/shorten")
-var dbUri = "mongodb://localhost:27017/url-shortner";
+var DB_URI = require("../config").DB_URI;
 
 /* GET api description. */
 router.get('/', function(req, res, next) {
@@ -13,7 +13,7 @@ router.get('/', function(req, res, next) {
 /* shortner a Url. */
 router.get('/shorten/*', function(req, res, next) {
 
-    mongo.connect(dbUri, function(err, db) {
+    mongo.connect(DB_URI, function(err, db) {
         assert.equal(null, err);
 
         var urls = db.collection("urls");

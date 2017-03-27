@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var assert = require("assert");
 var mongo = require("mongodb").MongoClient;
-var dbUri = "mongodb://localhost:27017/url-shortner";
+var DB_URI = require("../config").DB_URI;
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -13,7 +13,7 @@ router.get('/', function(req, res, next) {
 router.get('/:shortUrl', function(req, res, next) {
 
     // connect to the database
-    mongo.connect(dbUri, function(err, db) {
+    mongo.connect(DB_URI, function(err, db) {
         assert.equal(null, err, "can not connect to the database");
 
         var urls = db.collection("urls");
