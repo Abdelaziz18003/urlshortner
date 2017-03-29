@@ -4,29 +4,27 @@ var router = express.Router();
 var mongo = require("mongodb").MongoClient;
 var shorten = require("../functions/shorten");
 
+// load constant from config file
 const DB_URI = require("../config").DB_URI;
 const APP_URI = require("../config").APP_URI;
-const PORT = require("../config").PORT
+const PORT = require("../config").PORT;
 
 /* GET api description. */
 router.get('/', function(req, res, next) {
     res.send('respond with a resource');
 });
 
-/* shortner a Url. */
+/* shortening a new Url. */
 router.get('/new/*', function(req, res, next) {
 
     mongo.connect(DB_URI, function(err, db) {
         assert.equal(null, err);
 
-        var urls = db.collection("urls");
-        var resultsArray = [];
-        var maxCounter = 0;
-        var dbItem = {};
+        var newUrl = {};
 
         // get the max value of counter
+        var urls = db.collection("urls");
         urls.count({}, function(err, docsNum) {
-
             assert.equal(err, null, "error counting the number of docs");
 
             // make a new url object
