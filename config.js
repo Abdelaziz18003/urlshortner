@@ -1,5 +1,25 @@
+"use strict"
+require("dotenv").config();
+
+let NODE_ENV = process.env.NODE_ENV.trim(),
+    DB_URI = "",
+    APP_URI = "",
+    PORT = "";
+
+if (NODE_ENV == "development") {
+    DB_URI = process.env.DB_URI_DEV;
+    APP_URI = process.env.APP_URI_DEV;
+    PORT = process.env.PORT_DEV;
+
+} else if (NODE_ENV == "production") {
+    DB_URI = process.env.DB_URI;
+    APP_URI = process.env.APP_URI;
+    PORT = process.env.PORT;
+}
+
 module.exports = {
-    DB_URI: "mongodb://127.0.0.1:27017/url-shortner",
-    APP_URI: "localhost",
-    PORT: "3000"
+    NODE_ENV,
+    DB_URI,
+    APP_URI,
+    PORT
 }
