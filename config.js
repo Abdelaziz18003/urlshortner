@@ -1,5 +1,4 @@
 "use strict"
-require("dotenv").config();
 
 let NODE_ENV = process.env.NODE_ENV.trim(),
     DB_URI = "",
@@ -7,6 +6,7 @@ let NODE_ENV = process.env.NODE_ENV.trim(),
     PORT = "";
 
 if (NODE_ENV == "development") {
+    require("dotenv").config();
     DB_URI = process.env.DB_URI_DEV;
     APP_URI = process.env.APP_URI_DEV;
     PORT = process.env.PORT_DEV;
@@ -17,6 +17,7 @@ if (NODE_ENV == "development") {
     PORT = process.env.PORT;
 }
 
+console.log(DB_URI)
 module.exports = {
     NODE_ENV,
     DB_URI,
