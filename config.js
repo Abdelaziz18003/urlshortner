@@ -17,7 +17,6 @@ if (NODE_ENV == "development") {
     PORT = process.env.PORT;
 }
 
-console.log(DB_URI)
 module.exports = {
     NODE_ENV,
     DB_URI,
