@@ -5,20 +5,20 @@ var mongo = require("mongodb").MongoClient;
 var DB_URI = require("../config").DB_URI;
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
+router.get('/', function (req, res, next) {
     res.render('index', { title: 'Express' });
 });
 
 /* GET the shortened URL. */
-router.get('/:shortUrl', function(req, res, next) {
+router.get('/:shortUrl', function (req, res, next) {
 
     // connect to the database
-    mongo.connect(DB_URI, function(err, db) {
+    mongo.connect(DB_URI, function (err, db) {
         assert.equal(err, null, "can not connect to the database");
 
         // search for the unique document containing the provided short url
         var urls = db.collection("urls");
-        urls.find({ shortUrl: req.params.shortUrl }).toArray(function(err, docs) {
+        urls.find({ shortUrl: req.params.shortUrl }).toArray(function (err, docs) {
 
             if (docs.length > 0) {
 
