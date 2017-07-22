@@ -3,6 +3,7 @@ var assert = require("assert");
 var router = express.Router();
 var mongo = require("mongodb").MongoClient;
 var shorten = require("../functions/shorten");
+var validator = require("validator");
 
 // load constant from config file
 const DB_URI = require("../config").DB_URI;
@@ -19,33 +20,42 @@ router.get('/', function (req, res, next) {
 /* shortening a new Url. */
 router.get('/*', function (req, res, next) {
 
-    mongo.connect(DB_URI, function (err, db) {
-        assert.equal(null, err);
+    // check if the passed string is a valid URL
+    if (validator.isURL(req.params[0])) {
 
-        var newUrl = {};
+        mongo.connect(DB_URI, function (err, db) {
+            assert.equal(null, err);
 
-        // get the max value of counter
-        var urls = db.collection("urls");
-        urls.count({}, function (err, docsNum) {
-            assert.equal(err, null, "error counting the number of docs");
+            var newUrl = {};
 
-            // make a new url object
-            newUrl = {
-                longUrl: req.params[0],
-                shortUrl: shorten(docsNum + 1)
-            };
+            // get the max value of counter
+            var urls = db.collection("urls");
+            urls.count({}, function (err, docsNum) {
+                assert.equal(err, null, "error counting the number of docs");
 
-            // save the new url to the database
-            urls.insert(newUrl, function () {
+                // make a new url object
+                newUrl = {
+                    longUrl: req.params[0],
+                    shortUrl: shorten(docsNum + 1)
+                };
 
-                // respond with a json file containing both the long and the short urls
-                res.json({
-                    longUrl: newUrl.longUrl,
-                    shortUrl: "https://" + APP_URI + (NODE_ENV == "development" ? ":" + PORT : "") + "/" + newUrl.shortUrl
+                // save the new url to the database
+                urls.insert(newUrl, function () {
+
+                    // respond with a json file containing both the long and the short urls
+                    res.json({
+                        longUrl: newUrl.longUrl,
+                        shortUrl: "https://" + APP_URI + (NODE_ENV == "development" ? ":" + PORT : "") + "/" + newUrl.shortUrl
+                    });
+                    db.close();
                 });
-                db.close();
             });
         });
-    });
+        // response when the passed string is not a valid URL
+    } else {
+        res.json({
+            "error": "you have passed an invalid URL"
+        })
+    }
 })
 module.exports = router;
