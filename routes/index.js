@@ -6,7 +6,7 @@ var DB_URI = require("../config").DB_URI;
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
-    res.render('index', { title: 'Express' });
+    res.render('index');
 });
 
 /* GET the shortened URL. */

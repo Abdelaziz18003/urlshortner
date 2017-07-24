@@ -13,8 +13,7 @@ const NODE_ENV = require("../config").NODE_ENV;
 
 /* GET api description. */
 router.get('/', function (req, res, next) {
-    res.send('respond with a resource');
-
+    res.render('index');
 });
 
 /* shortening a new Url. */
